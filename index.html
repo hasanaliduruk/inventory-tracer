@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Tracer</title>
+    <link id="theme-link" rel="stylesheet" href="theme1.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div id="theme-back">
+        <button id="back-button">Back</button>
+        <button id="theme-toggle">🎨 Change Theme</button>
+    </div>
+    
+    <div id="main-container">
+        
+        <div id="summaryTableContainer"></div>
+        <div id="left-panel">
+            <div class="input-items">
+                <div class="input-group">
+                    <span>Item Id:</span>
+                    <input type="text" disabled id="itemid-entry" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                </div>
+                
+                <div class="input-group">
+                    <span>UPC:</span>
+                    <input type="text"disabled id="upc-entry">
+                </div>
+                
+                <div class="input-group">
+                    <span>Unit:</span>
+                    <input type="text"disabled id="unit-entry" oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
+                    <button id="max-button" disabled>Max</button>
+                </div>
+                
+                <div class="input-group">
+                    <span>Damaged:</span>
+                    <input type="text" disabled id="damaged-entry" oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
+                </div>
+                
+                <div class="input-group">
+                    <span>Exp. Date:</span>
+                    <input type="text" disabled id="expdate-entry" oninput="this.value = this.value.replace(/[^0-9-./]/g, '')" placeholder="mm-dd-yy">
+                    <button id="date-button">📅</button>
+                </div>
+    
+                <div class="button-group">
+                    <button id="undo-button" disabled>Undo</button>
+                    <button id="save-button" disabled>Save</button>
+                </div>
+                
+                <button id="upload-button">Upload an Excel File</button>
+                <button id="download-button" disabled>Export Processed Excel File</button>
+                <input type="file" accept=".xlsx, .xls" id="file-input">
+            </div>
+            
+        </div>
+        <div id="right-panel">
+            <div class="product-info">
+                <div id="top-div">
+                    <h3>Product Info: </h3>
+                    <button id="summary-button" disabled>Summary</button>
+                </div>
+                
+                
+                <p id="info-text">Product infos going to be displayed here.</p>
+                <div id="results-table-container"></div>
+            </div>
+            
+        </div>
+    </div>
+    <script src="script.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+*{
+    font-family: 'Squada One', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: rgb(78, 78, 78);
+    height: 100vh;
+}
+#main-container {
+    background-color: rgb(78, 78, 78);
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*
+1. Soft Mavi - Gri Tonları (Profesyonel & Modern)
+Arka Plan: rgba(240, 243, 247, 1) (Açık gri-mavi)
+Kartlar & Kutular: rgba(220, 225, 230, 1) (Soluk gri-mavi)
+Butonlar (Ana): rgba(52, 152, 219, 1) (Canlı ama göz yormayan mavi)
+Butonlar (İkincil): rgba(41, 128, 185, 1) (Biraz koyu mavi)
+Yazılar: rgba(44, 62, 80, 1) (Koyu gri-mavi, göz yormaz)
+
+2. Soft Bej - Kahve Tonları (Minimalist & Sıcak)
+Arka Plan: rgba(245, 245, 240, 1) (Açık bej)
+Kartlar & Kutular: rgba(230, 230, 225, 1) (Soluk krem)
+Butonlar (Ana): rgba(194, 178, 128, 1) (Yumuşak kahverengi)
+Butonlar (İkincil): rgba(120, 100, 80, 1) (Koyu toprak kahvesi)
+Yazılar: rgba(90, 80, 70, 1) (Tatlı bir koyu kahve)
+
+3. Soft Yeşil - Gri Tonları (Doğal & Ferah)
+Arka Plan: rgba(240, 250, 245, 1) (Çok açık pastel yeşil)
+Kartlar & Kutular: rgba(220, 235, 225, 1) (Soluk yeşil-gri)
+Butonlar (Ana): rgba(39, 174, 96, 1) (Canlı ve doğal yeşil)
+Butonlar (İkincil): rgba(29, 131, 72, 1) (Biraz koyu yeşil)
+Yazılar: rgba(44, 62, 80, 1) (Koyu gri-mavi)
+*/
+/* LEFT PANEL */
+
+#left-panel {
+    background-color: rgb(78, 78, 78);
+    display: flex;
+    width: 40%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.input-items {
+    background-color: rgba(150, 150, 150, 50);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0);
+    width: 85%;
+    height: 80%;
+    margin: 0;
+    justify-content: center;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-group span {
+    font-weight: bold;
+    width: 30%; /* Etiket genişliği */
+    text-align: left;
+    padding-right: 10px;
+}
+
+.input-group button {
+    padding: 0;
+    margin-left: 3px;
+    width: 8%;
+    height: 100%;
+
+}
+
+.input-group input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+button:disabled {
+    background-color: rgb(78, 78, 78);
+    cursor: not-allowed;
+}
+
+
+/* RIGHT PANEL */
+
+#right-panel {
+    background-color: rgb(78, 78, 78);
+    display: flex;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+}
+.product-info {
+    background-color: rgba(150, 150, 150, 50);
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    height: 80%;
+    padding: 25px;
+    border-radius: 15px;
+    gap: 10px;
+}
+#info-text {
+    background-color: white;
+    display: flex;
+    height: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 3px;
+    font-size: 20px;
+}
+
+#results-table-container {
+    background-color: white;
+    display: flex;
+    height: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 3px;
+    font-size: 20px;
+}
+
+
+
+#file-input {
+    display: none;
+}
+#top-div {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+#top-div button {
+    width: 20%;
+    min-width: 100px;
+    margin-left: auto;
+}
+
+.table-unit-col {
+    background-color: rgba(255, 100, 100, 255);
+}
+.table-received-col {
+    background-color: greenyellow;
+}
+table {
+    width: 100%;
+    background-color: white;
+    border-collapse: collapse;
+}
+table, th, td {
+    border: 1px solid black;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+#back-button{
+    display: none;
+    text-align: center;
+    padding: 5px;
+    border: none;
+    top: 0px;
+    margin-right: auto;
+    cursor: pointer;
+    width: auto;
+}
+#results-table-container .rows:hover{
+    background-color: #ccc;
+    cursor: pointer;
+}
+#theme-toggle {
+    padding: 5px;
+    border: none;
+    display: flex;
+    margin-left: auto;
+    cursor: pointer;
+    width: auto;
+}
+#theme-back {
+    display: flex;
+}
+
+@media (max-width: 900px) {
+    #main-container {
+        flex-direction: column;
+    }
+    #left-panel {
+        width: 100%;
+        height: 45%;
+    }
+    
+    #right-panel {
+        width: 100%;
+        height: 55%;
+    }
+}
