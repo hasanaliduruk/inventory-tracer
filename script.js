@@ -10,7 +10,8 @@ const expdateEntry = document.getElementById("expdate-entry");
 const infoText = document.getElementById("info-text");
 const downloadButton = document.getElementById("download-button");
 const summaryButton = document.getElementById("summary-button");
-const backButton = document.getElementById("back-button");
+const backButton = document.getElementById("summuary-back-button");
+const scannerBackButton = document.getElementById("scanner-back-button");
 const leftPanel = document.getElementById("left-panel");
 const rightPanel = document.getElementById("right-panel");
 const summaryTable = document.getElementById("summaryTableContainer");
@@ -20,6 +21,11 @@ const datePickButton = document.getElementById("date-button");
 const themes = ["theme1.css", "theme2.css", "theme3.css"];
 const themeLink = document.getElementById("theme-link");
 const toggleButton = document.getElementById("theme-toggle");
+const readerContainer = document.getElementById("reader-container");
+const scanButton = document.getElementById("scan-button");
+const mainContainer = document.getElementById("main-container");
+
+
 
 let currentTheme = localStorage.getItem("theme") || themes[0];
 themeLink.setAttribute("href", currentTheme);
@@ -34,6 +40,7 @@ leftPanel.style.display = "flex";
 rightPanel.style.display = "flex";
 summaryTable.style.display = "none";
 container.style.display = "none";
+readerContainer.style.display = "none";
 
 
 maxButton.disabled = true;
@@ -47,6 +54,7 @@ damagedEntry.disabled = true;
 expdateEntry.disabled = true;
 downloadButton.disabled = true;
 datePickButton.disabled = true;
+scanButton.disabled = true;
 
 upcEntry.value = "";
 itemidEntry.value = "";
@@ -101,6 +109,7 @@ backButton.addEventListener("click", function() {
     backButton.style.display = "none";
     summaryTable.style.display = "none";
 });
+
 // Dosya yüklenip yüklenmediğini kontrol et
 fileInput.addEventListener('change', function(event) {
     // Eğer bir dosya yüklenmişse
@@ -108,6 +117,7 @@ fileInput.addEventListener('change', function(event) {
         // Butonları aktif yap
         itemidEntry.disabled = false;
         upcEntry.disabled = false;
+        scanButton.disabled = false;
         summaryButton.disabled = false;
         window.addEventListener("beforeunload", function (event) {
             const message = "Your datas have not saved yet. Do you really want to leave?";
@@ -118,6 +128,7 @@ fileInput.addEventListener('change', function(event) {
         // Eğer dosya yoksa, butonları pasif yap
         itemidEntry.disabled = true;
         upcEntry.disabled = true;
+        scanButton.disabled = true;
     }
     const file = event.target.files[0];
     window.ExcelName = file.name;
@@ -176,6 +187,7 @@ undoButton.addEventListener("click", function(event) {
     saveButton.disabled = false;
 
     upcEntry.disabled = false;
+    scanButton.disabled = false;
     itemidEntry.disabled = false;
     unitEntry.disabled = false;
     damagedEntry.disabled = false;
@@ -248,6 +260,35 @@ summaryButton.addEventListener("click", function() {
     leftPanel.style.display = "none";
     rightPanel.style.display = "none";
 });
+scannerBackButton.addEventListener("click", function() {
+    window.html5Qrcodeglobal.stop();
+    scannerBackButton.style.display = "none";
+    mainContainer.style.display = "flex";
+    readerContainer.style.display = "none";
+});
+scanButton.addEventListener("click", function() {
+    QRScanner()
+})
+function QRScanner() {
+    const html5Qrcode = new Html5Qrcode('reader');
+    mainContainer.style.display = "none";
+    readerContainer.style.display = "flex";
+    scannerBackButton.style.display = "flex";
+    window.html5Qrcodeglobal = html5Qrcode;
+    const qrCodeSuccessCallback = (decodedText, decodedResult)=>{
+        if(decodedText){
+            upcEntry.value = decodedText;
+            upc_scan();
+            html5Qrcode.stop();
+            mainContainer.style.display = "flex";
+            readerContainer.style.display = "none";
+            scannerBackButton.style.display = "none";
+        }
+    }
+    const config = {fps:10, qrbox:{width:250, height:250}}
+    html5Qrcode.start({facingMode:"environment"}, config,qrCodeSuccessCallback );
+}
+
 
 function processUpc(upc) {
     return upc ? upc.toString().padStart(12, "0") : "";
