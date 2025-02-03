@@ -16,7 +16,12 @@
             <div class="logo-container">
                 <img id="logo" src="images/Buyable-main.avif" alt="">
             </div>
-            <button id="theme-toggle">🎨 Change Theme</button>
+            <div class="right-top-buttons-container">
+                <button id="download-template-button">Download Template</button>
+                <button id="theme-toggle">🎨 Change Theme</button>
+            </div>
+            
+
         </div>
     </header>
     <div id="theme-back">
@@ -41,13 +46,13 @@
                 <div class="input-group">
                     <span>UPC / Search:</span>
                     <input type="text"disabled id="upc-entry">
-                    <button id="scan-button">Scan</button>
+                    <button class="small-buttons" id="scan-button">Scan</button>
                 </div>
                 
                 <div class="input-group">
                     <span>Unit:</span>
                     <input type="text"disabled id="unit-entry" oninput="this.value = this.value.replace(/[^0-9-]/g, '')">
-                    <button id="max-button" disabled>Max</button>
+                    <button class="small-buttons" id="max-button" disabled>Max</button>
                 </div>
                 
                 <div class="input-group">
@@ -58,7 +63,7 @@
                 <div class="input-group">
                     <span>Exp. Date:</span>
                     <input type="text" disabled id="expdate-entry" oninput="this.value = this.value.replace(/[^0-9-./]/g, '')" placeholder="mm-dd-yy">
-                    <button id="date-button">📅</button>
+                    <button class="small-buttons" id="date-button">📅</button>
                 </div>
     
                 <div class="button-group">
