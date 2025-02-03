@@ -113,6 +113,30 @@ button {
     width: 100%;
 }
 
+#max-button {
+    height: 30px;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+    padding: 4px;
+}
+#scan-button {
+    height: 30px;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+    padding: 4px;
+}
+
+#date-button {
+    height: 30px;
+    justify-content: center;
+    text-align: center;
+    width: auto;
+    padding: 4px;
+}
+
+
 button:hover {
     background-color: rgb(126, 101, 86);
 }
