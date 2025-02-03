@@ -239,6 +239,36 @@ th, td {
 #theme-back {
     display: flex;
 }
+.right-top-buttons-container {
+    display: flex;
+    margin-left: auto;
+    gap: 3px;
+    min-height: 100%;
+
+    
+}
+#theme-toggle {
+    margin-left: auto;
+    padding: 5px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    min-height: 100%;
+    width: auto;
+}
+#download-template-button {
+    margin-left: auto;
+    padding: 5px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    min-height: 100%;
+    width: auto;
+}
 
 
 @media (max-width: 900px) {
