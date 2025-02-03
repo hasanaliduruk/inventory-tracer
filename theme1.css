@@ -11,7 +11,7 @@ body{
     height: 100vh;
 }
 #main-container {
-    background-color: rgba(181,154,124,255);
+    background-color: rgb(78, 78, 78);
     display: flex;
     flex-wrap: wrap;
     width: 100%;
