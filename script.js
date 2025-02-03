@@ -58,14 +58,7 @@ downloadButton.value = "";
 
 
 
-window.addEventListener("beforeunload", function (event) {
-    // Uyarıyı kişiselleştirebiliriz ancak tarayıcılar bunu sınırlayabilir.
-    const message = "Your datas have not saved yet. Do you really want to leave?";
-    
-    // Tarayıcıya özelleştirilmiş bir uyarı mesajı göstermek
-    event.returnValue = message;  // Eski tarayıcılar için
-    return message; // Yeni tarayıcılar için
-});
+
 
 toggleButton.addEventListener("click", () => {
     let currentIndex = themes.indexOf(themeLink.getAttribute("href"));
@@ -116,6 +109,11 @@ fileInput.addEventListener('change', function(event) {
         itemidEntry.disabled = false;
         upcEntry.disabled = false;
         summaryButton.disabled = false;
+        window.addEventListener("beforeunload", function (event) {
+            const message = "Your datas have not saved yet. Do you really want to leave?";
+            event.returnValue = message;  // Eski tarayıcılar için
+            return message; // Yeni tarayıcılar için
+        });
     } else {
         // Eğer dosya yoksa, butonları pasif yap
         itemidEntry.disabled = true;
