@@ -79,6 +79,25 @@ toggleButton.addEventListener("click", () => {
     // Kullanıcının seçimini kaydet
     localStorage.setItem("theme", newTheme);
 });
+document.getElementById("download-template-button").addEventListener("click", function () {
+    // 📌 1️⃣ Yeni bir çalışma kitabı (Workbook) oluştur
+    let wb = XLSX.utils.book_new();
+    
+    // 📌 2️⃣ Sayfa içeriğini belirle
+    let wsData = [
+        ["PO No.", "Item ID", "Case Pack", "Brand", "Description", "Upc", "ShipQuantity", "fba", "fbm", "Received", "Status", "Unit", "Damaged", "Expiring Soon", "exp date"], // Başlıklar
+        ["18-33324996", "84723", 1, "Vigo", "Rice Dnnr Yllw", "071072013014", 1200, 1120, 80, "", "", "", "", "", ""],      // Örnek veri
+    ];
+
+    // 📌 3️⃣ Veriyi Excel sayfasına çevir
+    let ws = XLSX.utils.aoa_to_sheet(wsData);
+    
+    // 📌 4️⃣ Sayfayı çalışma kitabına ekle
+    XLSX.utils.book_append_sheet(wb, ws, "Template");
+    
+    // 📌 5️⃣ Excel dosyasını oluştur ve indir
+    XLSX.writeFile(wb, "template.xlsx");
+});
 
 flatpickr(datePickButton, {
     dateFormat: "m-d-Y",
@@ -302,11 +321,22 @@ function processItemId(id) {
 itemidEntry.addEventListener("keydown", function(event) {
     if (event.key === "Enter") { 
         event.preventDefault(); // Varsayılan Enter davranışını (form gönderme vs.) engelle
-        itemid_scan();
+        //itemid_scan();
+        const id = itemidEntry.value.trim(); // Kullanıcının girdiği ID
+        if (!id) {
+            alert("Please enter an Item ID.");
+            return;
+        }
+
+        if (!window.excelData) {
+            alert("Please upload an Excel file first.");
+            return;
+        }
+        searchfromlasts(id);
     }
 });
 
-function displayResults(rows) {
+function displayResults(rows, itemid=false) {
     infoText.style.display = "none";
     container.style.display = "flex";
     
@@ -317,27 +347,53 @@ function displayResults(rows) {
         }
     else if (rows.length > 1) {
         let tableHtml = "<table border='1'><thead><tr>";
+        if (itemid) {
+            // Tablo başlıklarını dataframe sütun adlarından al
+            const columns = Object.keys(rows[0]);
+            tableHtml += `<th>${"Brand"}</th>
+                        <th>${"Description"}</th>
+                        <th>${"Upc"}</th>
+                        <th>${"Item Id"}</th>`;
 
-        // Tablo başlıklarını dataframe sütun adlarından al
-        const columns = Object.keys(rows[0]);
-        tableHtml += `<th>${"Brand"}</th>
-                    <th>${"Description"}</th>
-                    <th>${"Upc"}</th>`;
+
+            tableHtml += "</tr></thead><tbody>";
+
+            // Satırları ekle
+            rows.forEach((row, index) => {
+                tableHtml += `<tr class="rows" onclick="selectRow(${row.realIndex})">`;
+                tableHtml += `<td>${row["Brand"]}</td>
+                            <td>${row["Description"]}</td>
+                            <td>${row["Upc"]}</td>
+                            <td>${row["Item Id"]}</td>`;
+                tableHtml += "</tr>";
+            });
+
+            tableHtml += "</tbody></table>";
+            container.innerHTML = tableHtml;
+        }
+        else {
+            // Tablo başlıklarını dataframe sütun adlarından al
+            const columns = Object.keys(rows[0]);
+            tableHtml += `<th>${"Brand"}</th>
+                        <th>${"Description"}</th>
+                        <th>${"Upc"}</th>`;
 
 
-        tableHtml += "</tr></thead><tbody>";
+            tableHtml += "</tr></thead><tbody>";
 
-        // Satırları ekle
-        rows.forEach((row, index) => {
-            tableHtml += `<tr class="rows" onclick="selectRow(${row.realIndex})">`;
-            tableHtml += `<td>${row["Brand"]}</td>
-                        <td>${row["Description"]}</td>
-                        <td>${row["Upc"]}</td>`;
-            tableHtml += "</tr>";
-        });
+            // Satırları ekle
+            rows.forEach((row, index) => {
+                tableHtml += `<tr class="rows" onclick="selectRow(${row.realIndex})">`;
+                tableHtml += `<td>${row["Brand"]}</td>
+                            <td>${row["Description"]}</td>
+                            <td>${row["Upc"]}</td>`;
+                tableHtml += "</tr>";
+            });
 
-        tableHtml += "</tbody></table>";
-        container.innerHTML = tableHtml;
+            tableHtml += "</tbody></table>";
+            container.innerHTML = tableHtml;
+        }
+        
     }
     else if (rows.length === 1) {
         let index = rows[0].realIndex;
@@ -351,6 +407,23 @@ function selectRow(index) {
     index_scan(index);
 }
 
+function searchfromlasts(searchId) {
+    
+    const matchingRows = [];
+    window.excelData.forEach((row, realIndex) => {
+        let itemId = row["Item Id"]; // Değeri al
+        if (itemId && itemId.toString().toLowerCase().slice(-searchId.length).includes(searchId.toLowerCase())) {
+            matchingRows.push({ realIndex, ...row }); // Gerçek index'i de saklıyoruz
+        }
+    });
+    
+
+    // Sonuçları göster
+    displayResults(matchingRows, true);
+    
+} 
+
+
 function itemid_scan() {
     const searchId = itemidEntry.value.trim(); // Kullanıcının girdiği ID
     if (!searchId) {
@@ -363,14 +436,16 @@ function itemid_scan() {
         return;
     }
 
+
     // JSON verisinde Item ID'yi bul
     const foundItem = window.excelData.find(row => row["Item Id"] == searchId);
     const itemIndex = window.excelData.findIndex(row => row["Item Id"] == searchId);
 
     // Eğer bulunduysa ekrana yazdır
     if (foundItem) {
-        let casepack = foundItem["Case Pack"]
-        let shipquantity = foundItem["ShipQuantity"]
+        let casepack = foundItem["Case Pack"];
+        let shipquantity = foundItem["ShipQuantity"];
+        let received = foundItem["Received"];
         let info = "";
         for (let column in foundItem) {
             // Sütun adı ve değeri birleştirip info'ya ekliyoruz
@@ -384,19 +459,25 @@ function itemid_scan() {
         if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
             shipquantity = parseInt(shipquantity, 10);
         }
+        if (typeof received === "number" && Number.isInteger(received)) {
+            received = parseInt(received, 10);
+        }
         if (casepack !== null && casepack !== "" && !isNaN(casepack) && casepack !== 0) {
             try {
                 casepack = parseInt(casepack, 10);
         
                 if (casepack === 1) {
-                    info += `\n${shipquantity} UNITS`;
+                    info += `\n${(shipquantity - received)} UNITS`;
                 } else {
                     if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
                         shipquantity = parseInt(shipquantity, 10);
                     }
+                    if (typeof received === "number" && Number.isInteger(received)) {
+                        received = parseInt(received, 10);
+                    }
         
-                    let caseCount = Math.floor(shipquantity / casepack);
-                    let unitCount = shipquantity % casepack;
+                    let caseCount = Math.floor((shipquantity - received) / casepack);
+                    let unitCount = (shipquantity - received) % casepack;
                     info += `\n${caseCount} CASE, ${unitCount} UNITS`
                 }
             } catch (error) {
@@ -460,8 +541,9 @@ function index_scan(index) {
 
     // Eğer bulunduysa ekrana yazdır
     if (foundItem) {
-        let casepack = foundItem["Case Pack"]
-        let shipquantity = foundItem["ShipQuantity"]
+        let casepack = foundItem["Case Pack"];
+        let shipquantity = foundItem["ShipQuantity"];
+        let received = foundItem["Received"];
         let info = "";
         for (let column in foundItem) {
             // Sütun adı ve değeri birleştirip info'ya ekliyoruz
@@ -469,24 +551,31 @@ function index_scan(index) {
                 {
                     info += `${column}: ${foundItem[column]}\n`;
                 }
+                
         }
 
         if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
             shipquantity = parseInt(shipquantity, 10);
+        }
+        if (typeof received === "number" && Number.isInteger(received)) {
+            received = parseInt(received, 10);
         }
         if (casepack !== null && casepack !== "" && !isNaN(casepack) && casepack !== 0) {
             try {
                 casepack = parseInt(casepack, 10);
         
                 if (casepack === 1) {
-                    info += `\n${shipquantity} UNITS`;
+                    info += `\n${(shipquantity - received)} UNITS`;
                 } else {
                     if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
                         shipquantity = parseInt(shipquantity, 10);
                     }
+                    if (typeof received === "number" && Number.isInteger(received)) {
+                        received = parseInt(received, 10);
+                    }
         
-                    let caseCount = Math.floor(shipquantity / casepack);
-                    let unitCount = shipquantity % casepack;
+                    let caseCount = Math.floor((shipquantity - received) / casepack);
+                    let unitCount = (shipquantity - received) % casepack;
                     info += `\n${caseCount} CASE, ${unitCount} UNITS`
                 }
             } catch (error) {
@@ -568,8 +657,9 @@ function upc_scan() {
 
         // Eğer bulunduysa ekrana yazdır
         if (foundItem) {
-            let casepack = foundItem["Case Pack"]
-            let shipquantity = foundItem["ShipQuantity"]
+            let casepack = foundItem["Case Pack"];
+            let shipquantity = foundItem["ShipQuantity"];
+            let received = foundItem["Received"];
 
             let info = "";
             for (let column in foundItem) {
@@ -578,24 +668,31 @@ function upc_scan() {
                     {
                         info += `${column}: ${foundItem[column]}\n`;
                     }
+                    
             }
-
+    
             if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
                 shipquantity = parseInt(shipquantity, 10);
+            }
+            if (typeof received === "number" && Number.isInteger(received)) {
+                received = parseInt(received, 10);
             }
             if (casepack !== null && casepack !== "" && !isNaN(casepack) && casepack !== 0) {
                 try {
                     casepack = parseInt(casepack, 10);
             
                     if (casepack === 1) {
-                        info += `\n${shipquantity} UNITS`;
+                        info += `\n${(shipquantity - received)} UNITS`;
                     } else {
                         if (typeof shipquantity === "number" && Number.isInteger(shipquantity)) {
                             shipquantity = parseInt(shipquantity, 10);
                         }
+                        if (typeof received === "number" && Number.isInteger(received)) {
+                            received = parseInt(received, 10);
+                        }
             
-                        let caseCount = Math.floor(shipquantity / casepack);
-                        let unitCount = shipquantity % casepack;
+                        let caseCount = Math.floor((shipquantity - received) / casepack);
+                        let unitCount = (shipquantity - received) % casepack;
                         info += `\n${caseCount} CASE, ${unitCount} UNITS`
                     }
                 } catch (error) {
