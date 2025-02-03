@@ -19,6 +19,21 @@ body{
 #main-container span {
     color: rgba(44, 62, 80, 1);
 }
+.logo-main {
+    display: flex;
+    height: auto;
+    width: 100%;
+    background-color: rgba(232,225,209,255);
+}
+.logo-container {
+    display: flex;
+    background-color: rgba(232,225,209,255);
+    margin-right: auto;
+}
+#logo {
+    max-height: 25px;
+    padding: 2px;
+}
 
 /* LEFT PANEL */
 
