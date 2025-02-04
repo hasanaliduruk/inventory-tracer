@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*! For license information please see html5-qrcode.min.js.LICENSE.txt */
 var __Html5QrcodeLibrary__;
 (() => {
