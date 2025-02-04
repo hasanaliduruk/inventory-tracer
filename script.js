@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const uploadButton = document.getElementById('upload-button');
 const fileInput = document.getElementById('file-input');
 const saveButton = document.getElementById('save-button');
