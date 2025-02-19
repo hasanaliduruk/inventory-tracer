@@ -85,8 +85,8 @@ document.getElementById("download-template-button").addEventListener("click", fu
     
     // 📌 2️⃣ Sayfa içeriğini belirle
     let wsData = [
-        ["PO No.", "Item Id", "Case Pack", "Brand", "Description", "Upc", "ShipQuantity", "fba", "fbm", "Received", "Status", "Unit", "Damaged", "Expiring Soon", "exp date"], // Başlıklar
-        ["18-33324996", "84723", 1, "Vigo", "Rice Dnnr Yllw", "071072013014", 1200, 1120, 80, "", "", "", "", "", ""],      // Örnek veri
+        ["PO No.", "Invoice No.", "Item Id", "Case Pack", "Brand", "Description", "Upc", "ShipQuantity", "fba", "fbm", "Received", "Status", "Unit", "Damaged", "Expiring Soon", "exp date"], // Başlıklar
+        ["18-33324996","", "84723", 1, "Vigo", "Rice Dnnr Yllw", "071072013014", 1200, 1120, 80, "", "", "", "", "", ""],      // Örnek veri
     ];
 
     // 📌 3️⃣ Veriyi Excel sayfasına çevir
