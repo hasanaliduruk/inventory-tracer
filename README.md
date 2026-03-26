@@ -52,4 +52,3 @@ This architecture was initially developed to optimize and automate operational w
 
 ---
 *Developed by [Hasan Ali Duruk](https://github.com/hasanaliduruk).*
-```
